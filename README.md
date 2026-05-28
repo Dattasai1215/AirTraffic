@@ -50,19 +50,43 @@ Runs the Streamlit dashboard providing a live, 3D weather-aware radar screen, dr
 
 - **Runs:** `streamlit run dashboard/app.py`
 
+### Step 3B: Launch the Live Tracking Frontend (Optional but Recommended)
+
+Modern React + Leaflet frontend for production-ready live aircraft tracking. Perfect for public viewing and worldwide deployment.
+
+- **Location:** `frontend/`
+- **Runs:** `npm run dev` (development) or deploy to Vercel for production
+- **Features:**
+  - 🌍 Real-time interactive map with Leaflet
+  - ✈️ Live aircraft markers with heading rotation
+  - 🔍 Search and filter flights
+  - 📊 Live metrics and statistics
+  - 🚀 Deploy to Vercel with one click
+
 ---
 
 ## Technologies Used
 
-- **Programming Language**: Python
+### Backend
+- **Programming Language**: Python 3.x
 - **Machine Learning**: XGBoost, Scikit-learn
 - **Data Engineering**: Pandas, NumPy
-- **API Fetching**: OpenSky API (with custom high-fidelity stateful mock simulation)
+- **API Fetching**: OpenSky Network API (with custom high-fidelity stateful mock simulation)
 - **Visualization**: Streamlit, Plotly 3D
+- **Deployment**: Streamlit Cloud
+
+### Frontend (Optional)
+- **Framework**: React 18, Vite
+- **Mapping**: Leaflet.js
+- **Styling**: Tailwind CSS
+- **APIs**: OpenSky Network API
+- **Deployment**: Vercel
 
 ---
 
 ## Quick Start
+
+### Backend Setup (Python)
 
 1. Install dependencies:
    ```bash
@@ -81,3 +105,31 @@ Runs the Streamlit dashboard providing a live, 3D weather-aware radar screen, dr
    streamlit run dashboard/app.py
    ```
 5. Open [http://localhost:8501](http://localhost:8501) in your browser.
+
+### Frontend Setup (React - Optional)
+
+For a modern, production-ready interface:
+
+1. Navigate to frontend folder:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start development server:
+   ```bash
+   npm run dev
+   ```
+4. Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+### Deploy Frontend to Vercel (1-Click)
+
+1. Push code to GitHub
+2. Go to [vercel.com](https://vercel.com)
+3. Import your repository
+4. Set **Root Directory**: `frontend`
+5. Click **Deploy**
+
+Your live tracking app is now public! 🌍
