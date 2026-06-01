@@ -84,7 +84,8 @@ git push origin main
 If running backend on same server, add environment variable:
 
 ```
-VITE_BACKEND_URL=https://your-backend.streamlit.app
+VITE_API_BASE_URL=https://your-backend.example.com
+VITE_BASE_PATH=/
 ```
 
 ## 📡 API Configuration
@@ -139,7 +140,8 @@ Create `.env.local`:
 
 ```
 VITE_OPENSKY_URL=https://opensky-network.org/api/states/all
-VITE_BACKEND_URL=http://localhost:8501
+VITE_API_BASE_URL=http://localhost:8000
+VITE_BASE_PATH=/
 VITE_REFRESH_INTERVAL=10000
 ```
 

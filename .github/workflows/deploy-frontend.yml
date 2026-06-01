@@ -25,7 +25,8 @@ jobs:
       - name: Build frontend
         run: |
           cd frontend
-          npm run build
+          npm install
+          VITE_BASE_PATH=/AirTraffic/ npm run build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4

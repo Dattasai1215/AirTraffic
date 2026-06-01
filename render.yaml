@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: aeroshield-backend
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python backend/server.py
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: OPENAI_API_KEY
+        value: ""
+  - type: static
+    name: aeroshield-frontend
+    env: static
+    region: oregon
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build
+    publishPath: frontend/dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: "https://aeroshield-backend.onrender.com"
+      - key: VITE_BASE_PATH
+        value: "/"

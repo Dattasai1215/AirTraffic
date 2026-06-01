@@ -5,8 +5,9 @@ import SearchBar from './components/SearchBar'
 import MetricsBar from './components/MetricsBar'
 import './index.css'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ''
-const OPEN_SKY_URL = 'https://opensky-network.org/api/states/all?lamin=39.5&lamax=41.5&lomin=-75.0&lomax=-72.0'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_BACKEND_URL || ''
+const OPEN_SKY_URL = import.meta.env.VITE_OPENSKY_URL || 'https://opensky-network.org/api/states/all?lamin=39.5&lamax=41.5&lomin=-75.0&lomax=-72.0'
+const REFRESH_INTERVAL = Number(import.meta.env.VITE_REFRESH_INTERVAL) || 10000
 
 function App() {
   const [flights, setFlights] = useState([])
@@ -93,7 +94,7 @@ function App() {
     }
 
     fetchFlights()
-    const interval = setInterval(fetchFlights, 10000)
+    const interval = setInterval(fetchFlights, REFRESH_INTERVAL)
     return () => clearInterval(interval)
   }, [])
 
