@@ -244,6 +244,9 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment guide covering:
 - **Environment Variables** configuration
 - **Monitoring & Logs**
 
+> After GitHub Actions succeeds, your public frontend will be available at:
+> `https://Dattasai1215.github.io/AirTraffic`
+
 ### Quick Deploy to Render (5 minutes)
 
 1. Push code to GitHub
