@@ -5,7 +5,7 @@ services:
     region: oregon
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: python backend/server.py
+    startCommand: sh -c "cd /opt/render/project && python backend/server.py"
     envVars:
       - key: PORT
         value: "8000"
