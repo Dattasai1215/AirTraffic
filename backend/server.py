@@ -118,8 +118,8 @@ def api_flights():
             "predicted_latitude": round(future_lat, 5),
             "predicted_longitude": round(future_lon, 5),
             "predicted_altitude": round(future_alt, 1),
-            "is_anomaly": is_anomaly,
-            "anomaly_score": round(anomaly_score, 3),
+            "is_anomaly": bool(is_anomaly),
+            "anomaly_score": round(float(anomaly_score), 3),
         })
 
     for idx, flight in enumerate(flights_payload):
