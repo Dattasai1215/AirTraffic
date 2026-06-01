@@ -4,6 +4,11 @@ AI-powered aviation monitoring system that tracks aircraft positions in real tim
 
 The platform visualizes active airspace in 3D and leverages advanced machine learning to provide decision support to Air Traffic Control (ATC).
 
+## Live Demo
+
+- Frontend deployed publicly at: https://dattasai1215.github.io/AirTraffic/
+- Note: This is the static frontend deployment. For full backend-powered ML predictions and AI summaries, deploy `backend/server.py` to a cloud host and configure `VITE_API_BASE_URL` to point to your public backend URL before building.
+
 ## Project Workflow
 
 ```
