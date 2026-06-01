@@ -4,26 +4,6 @@ AI-powered aviation monitoring system that tracks aircraft positions in real tim
 
 The platform visualizes active airspace in 3D and leverages advanced machine learning to provide decision support to Air Traffic Control (ATC).
 
-## Live Demo
-
-- Frontend deployed publicly at: https://dattasai1215.github.io/AirTraffic/
-- Note: This is the static frontend deployment. For full backend-powered ML predictions and AI summaries, deploy `backend/server.py` to a public cloud host and configure `VITE_API_BASE_URL` to point to that backend URL before building.
-
-## Full Stack Deployment
-
-For complete functionality with ML predictions, collision detection, anomaly alerts, and AI summaries:
-
-- Deploy the backend in a cloud service (Render, Railway, Heroku, or Docker-based host)
-- Set `VITE_API_BASE_URL` to the public backend URL
-- Set `VITE_BASE_PATH` to `/` for root deployments, or `/AirTraffic/` for GitHub Pages
-
-Example backend URL for production builds:
-
-```bash
-VITE_API_BASE_URL=https://your-backend-host.example.com
-VITE_BASE_PATH=/
-```
-
 ## Project Workflow
 
 ```
@@ -162,20 +142,6 @@ python models/train_xgboost_models.py
 
 *These create ML models in `/models/`. Commit them to GitHub.*
 
-### Option 5: Deploy Full Stack to Render
-
-1. Create a new Python Web Service for the backend.
-2. Create a new Static Site for the frontend.
-3. Use `render.yaml` in this repo to configure both services.
-4. Set `VITE_API_BASE_URL` to your public backend URL and `VITE_BASE_PATH` to `/`.
-
-Example frontend settings:
-
-```bash
-VITE_API_BASE_URL=https://your-backend.onrender.com
-VITE_BASE_PATH=/
-```
-
 ---
 
 ## Backend API Endpoints
@@ -234,7 +200,6 @@ FLASK_ENV=development
 FLASK_DEBUG=1
 OPENAI_API_KEY=sk-your-key  # Optional, for AI summaries
 VITE_API_BASE_URL=http://localhost:8000
-VITE_BASE_PATH=/
 ```
 
 ---
@@ -278,9 +243,6 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment guide covering:
 - **Deploy to Vercel** (frontend)
 - **Environment Variables** configuration
 - **Monitoring & Logs**
-
-> After GitHub Actions succeeds, your public frontend will be available at:
-> `https://Dattasai1215.github.io/AirTraffic`
 
 ### Quick Deploy to Render (5 minutes)
 

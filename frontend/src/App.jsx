@@ -5,9 +5,8 @@ import SearchBar from './components/SearchBar'
 import MetricsBar from './components/MetricsBar'
 import './index.css'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_BACKEND_URL || ''
-const OPEN_SKY_URL = import.meta.env.VITE_OPENSKY_URL || 'https://opensky-network.org/api/states/all?lamin=39.5&lamax=41.5&lomin=-75.0&lomax=-72.0'
-const REFRESH_INTERVAL = Number(import.meta.env.VITE_REFRESH_INTERVAL) || 10000
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
+const OPEN_SKY_URL = 'https://opensky-network.org/api/states/all?lamin=39.5&lamax=41.5&lomin=-75.0&lomax=-72.0'
 
 function App() {
   const [flights, setFlights] = useState([])
@@ -16,18 +15,18 @@ function App() {
   const [conflicts, setConflicts] = useState(0)
   const [searchTerm, setSearchTerm] = useState('')
   const [summary, setSummary] = useState('Live flight briefing is loading...')
-  const [dataSource, setDataSource] = useState(API_BASE_URL ? 'AeroShield backend' : 'OpenSky public API')
+  const [dataSource, setDataSource] = useState('AeroShield backend')
 
   useEffect(() => {
     const fetchFlights = async () => {
       setLoading(true)
       try {
-        const url = API_BASE_URL ? `${API_BASE_URL}/api/flights` : OPEN_SKY_URL
+        const url = `${API_BASE_URL}/api/flights`
         const response = await fetch(url)
         const data = await response.json()
 
         if (data.flights) {
-              setFlights(data.flights)
+          setFlights(data.flights)
           setConflicts(data.conflictCount || 0)
           setSummary(data.summary || 'Live flight tracking is active. No summary available.')
           setDataSource(API_BASE_URL ? 'AeroShield backend' : 'OpenSky public API')
@@ -94,7 +93,7 @@ function App() {
     }
 
     fetchFlights()
-    const interval = setInterval(fetchFlights, REFRESH_INTERVAL)
+    const interval = setInterval(fetchFlights, 10000)
     return () => clearInterval(interval)
   }, [])
 
