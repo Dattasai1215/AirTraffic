@@ -21,7 +21,7 @@ function App() {
     const fetchFlights = async () => {
       setLoading(true)
       try {
-        const url = `${API_BASE_URL}/api/flights`
+        const url = API_BASE_URL ? `${API_BASE_URL}/api/flights` : OPEN_SKY_URL
         const response = await fetch(url)
         const data = await response.json()
 
