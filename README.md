@@ -44,118 +44,219 @@ Trains the XGBoost regressors (latitude, longitude, altitude future offsets), XG
   - `models/conflict_classifier.pkl`
   - `models/anomaly_detector.pkl`
 
-### Step 3: Launch the Airspace Dashboard
+### Step 3: Launch Backend API
 
-Runs the Streamlit dashboard providing a live, 3D weather-aware radar screen, dropdown aircraft telemetry inspector, and ATC console logs.
+Runs the Flask backend providing real-time flight tracking, ML predictions, collision/anomaly detection, and optional AI summaries.
 
-- **Runs:** `streamlit run dashboard/app.py`
+- **Runs:** `python backend/server.py`
+- **Features:**
+  - 🔌 REST API endpoints
+  - 🤖 ML inference in real-time
+  - 🌪️ Weather-aware predictions
+  - 🧠 Optional OpenAI summaries
+  - 📊 CORS-enabled for frontend
 
-### Step 3B: Launch the Live Tracking Frontend (Optional but Recommended)
+### Step 4: Launch the Live Tracking Frontend
 
 Modern React + Leaflet frontend for production-ready live aircraft tracking. Perfect for public viewing and worldwide deployment.
 
 - **Location:** `frontend/`
-- **Runs:** `npm run dev` (development) or deploy to Vercel for production
+- **Runs:** `npm run dev` (development) or `npm run build` (production)
 - **Features:**
   - 🌍 Real-time interactive map with Leaflet
   - ✈️ Live aircraft markers with heading rotation
   - 🔍 Search and filter flights
   - 📊 Live metrics and statistics
-  - 🚀 Deploy to Vercel with one click
+  - 🚀 Easy deployment to GitHub Pages/Vercel
 
 ---
 
 ## Technologies Used
 
 ### Backend
-- **Programming Language**: Python 3.x
-- **Machine Learning**: XGBoost, Scikit-learn
-- **Data Engineering**: Pandas, NumPy
-- **API Fetching**: OpenSky Network API (with custom high-fidelity stateful mock simulation)
-- **Visualization**: Streamlit, Plotly 3D
-- **Deployment**: Streamlit Cloud
+- **Language**: Python 3.x
+- **Framework**: Flask
+- **ML**: XGBoost, Scikit-learn, Isolation Forest
+- **Data**: Pandas, NumPy
+- **API**: OpenSky Network API
+- **Deployment**: Docker, Render, Railway
+- **Optional AI**: OpenAI GPT-3.5
 
-### Frontend (Optional)
-- **Framework**: React 18, Vite
+### Frontend
+- **Framework**: React 18 + Vite
 - **Mapping**: Leaflet.js
 - **Styling**: Tailwind CSS
-- **APIs**: OpenSky Network API
-- **Deployment**: Vercel
+- **HTTP**: Axios
+- **Deployment**: GitHub Pages, Vercel, Render
 
 ---
 
 ## Quick Start
 
-### Backend Setup (Python)
+### Option 1: Frontend Only (Direct OpenSky Data)
+
+```bash
+cd frontend
+npm install
+npm run dev
+# Open http://localhost:5173
+```
+
+**No backend needed. Uses free OpenSky API directly.**
+
+### Option 2: Full Stack (Recommended)
+
+In **Terminal 1** - Start Backend:
+```bash
+python -m venv venv
+# Activate: venv\Scripts\activate (Windows) or source venv/bin/activate (Mac/Linux)
+pip install -r requirements.txt
+python backend/server.py
+# Backend at http://localhost:8000
+```
+
+In **Terminal 2** - Start Frontend:
+```bash
+cd frontend
+npm install
+npm run dev
+# Frontend at http://localhost:5173
+```
+
+**Features:** ML predictions, AI summaries, anomaly detection, collision detection
+
+### Option 3: Docker (All-in-One)
+
+```bash
+docker-compose up --build
+# Backend: http://localhost:8000
+# Frontend: http://localhost:5173
+```
+
+### Option 4: Generate Models First (One-Time)
+
+```bash
+python data/generate_flight_data.py
+python models/train_xgboost_models.py
+```
+
+*These create ML models in `/models/`. Commit them to GitHub.*
+
+---
+
+## Backend API Endpoints
+
+Once the backend is running at `http://localhost:8000`:
+
+### Get Live Flights + ML Predictions
+
+```bash
+curl http://localhost:8000/api/flights
+```
+
+**Response:**
+- **flights[]**: Array of aircraft with position, speed, heading
+- **conflictCount**: Number of detected conflicts
+- **summary**: AI-generated briefing
+- **alerts[]**: Active anomalies and warnings
+- **weather_zones[]**: Storm/turbulence areas
+
+### Check Backend Status
+
+```bash
+curl http://localhost:8000/api/status
+```
+
+---
+
+## Backend Setup (Python)
 
 1. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-2. Generate flight datasets:
+2. Generate flight datasets (first time only):
    ```bash
    python data/generate_flight_data.py
    ```
-3. Train XGBoost and Isolation Forest models:
+3. Train ML models (first time only):
    ```bash
    python models/train_xgboost_models.py
    ```
-4. Start the ATC monitoring room:
+4. Start the backend:
    ```bash
-   streamlit run dashboard/app.py
+   python backend/server.py
    ```
-5. Open [http://localhost:8501](http://localhost:8501) in your browser.
+   Backend at `http://localhost:8000`
 
-### Frontend Setup (React)
+### Configure Environment (Optional)
 
-For a modern, production-ready interface:
+Copy `.env.example` to `.env.local`:
 
-1. Navigate to the frontend folder:
+```bash
+HOST=127.0.0.1
+PORT=8000
+FLASK_ENV=development
+FLASK_DEBUG=1
+OPENAI_API_KEY=sk-your-key  # Optional, for AI summaries
+VITE_API_BASE_URL=http://localhost:8000
+```
+
+---
+
+## Frontend Setup (React)
+
+## Frontend Setup (React)
+
+1. Navigate to frontend folder:
    ```bash
    cd frontend
    ```
+
 2. Install dependencies:
    ```bash
    npm install
    ```
-3. Start the development server:
+
+3. Start development server:
    ```bash
    npm run dev
    ```
-4. Open [http://localhost:5173](http://localhost:5173) in your browser.
+   Frontend at `http://localhost:5173`
 
-### Backend API Server
-
-The backend provides live flight tracking, ML prediction, conflict risk scoring, anomaly detection, and optional AI summary generation.
-
-1. Install Python dependencies:
+4. Build for production:
    ```bash
-   pip install -r requirements.txt
+   npm run build
+   # Output: frontend/dist/
    ```
-2. Run the backend server:
-   ```bash
-   python backend/server.py
-   ```
-3. Configure the frontend to consume the backend by setting `VITE_API_BASE_URL` to `http://localhost:8000`.
 
-If you want AI summaries, set `OPENAI_API_KEY` before starting the backend:
+---
 
-```bash
-set OPENAI_API_KEY=your_api_key
-python backend/server.py
-```
+## Deployment
 
-### Deploy Frontend to GitHub Pages
+See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment guide covering:
 
-The repository includes a GitHub Actions workflow that builds the frontend and deploys it to GitHub Pages on every push to `main`.
+- **Local Docker Setup** with `docker-compose`
+- **Deploy to Render** (backend + frontend)
+- **Deploy to Railway** (backend + frontend)
+- **Deploy to GitHub Pages** (frontend via Actions)
+- **Deploy to Vercel** (frontend)
+- **Environment Variables** configuration
+- **Monitoring & Logs**
 
-1. Push your code to the GitHub repository.
-2. Ensure GitHub Pages is enabled for the repository and set to use the `gh-pages` branch.
-3. The workflow at `.github/workflows/deploy-frontend.yml` will publish `frontend/dist` automatically.
+### Quick Deploy to Render (5 minutes)
 
-### Recommended Deployment
+1. Push code to GitHub
+2. Go to [render.com](https://render.com)
+3. **New Web Service**:
+   - Select your AirTraffic repo
+   - Root Directory: (empty)
+   - Environment: Docker
+   - Set `FLASK_ENV=production` and `OPENAI_API_KEY` (optional)
+4. **New Static Site**:
+   - Root Directory: `frontend`
+   - Build: `npm install && npm run build`
+   - Publish: `dist`
+   - Set `VITE_API_BASE_URL` to your Render backend URL
 
-- Frontend: GitHub Pages or Vercel
-- Backend: Render, Railway, Fly.io, or another Python host
-
-For the best experience, run the frontend and backend together locally and point the frontend at `http://localhost:8000`.
+Your site is now live! ✈️

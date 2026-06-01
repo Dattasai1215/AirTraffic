@@ -1,6 +1,12 @@
 import os
 import time
 import logging
+import sys
+from pathlib import Path
+
+# Add parent directory to path to allow imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from flask import Flask, jsonify
 from flask_cors import CORS
 from backend.opensky_fetcher import fetch_active_flights
