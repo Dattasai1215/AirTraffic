@@ -10,3 +10,4 @@ xgboost
 Flask
 flask-cors
 openai
+gunicorn

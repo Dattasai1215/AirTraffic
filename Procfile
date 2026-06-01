@@ -1,1 +1,1 @@
-web: python backend/server.py
+web: gunicorn backend.server:app --bind 0.0.0.0:$PORT --workers 2
