@@ -106,11 +106,11 @@ Modern React + Leaflet frontend for production-ready live aircraft tracking. Per
    ```
 5. Open [http://localhost:8501](http://localhost:8501) in your browser.
 
-### Frontend Setup (React - Optional)
+### Frontend Setup (React)
 
 For a modern, production-ready interface:
 
-1. Navigate to frontend folder:
+1. Navigate to the frontend folder:
    ```bash
    cd frontend
    ```
@@ -118,18 +118,44 @@ For a modern, production-ready interface:
    ```bash
    npm install
    ```
-3. Start development server:
+3. Start the development server:
    ```bash
    npm run dev
    ```
 4. Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-### Deploy Frontend to Vercel (1-Click)
+### Backend API Server
 
-1. Push code to GitHub
-2. Go to [vercel.com](https://vercel.com)
-3. Import your repository
-4. Set **Root Directory**: `frontend`
-5. Click **Deploy**
+The backend provides live flight tracking, ML prediction, conflict risk scoring, anomaly detection, and optional AI summary generation.
 
-Your live tracking app is now public! 🌍
+1. Install Python dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. Run the backend server:
+   ```bash
+   python backend/server.py
+   ```
+3. Configure the frontend to consume the backend by setting `VITE_API_BASE_URL` to `http://localhost:8000`.
+
+If you want AI summaries, set `OPENAI_API_KEY` before starting the backend:
+
+```bash
+set OPENAI_API_KEY=your_api_key
+python backend/server.py
+```
+
+### Deploy Frontend to GitHub Pages
+
+The repository includes a GitHub Actions workflow that builds the frontend and deploys it to GitHub Pages on every push to `main`.
+
+1. Push your code to the GitHub repository.
+2. Ensure GitHub Pages is enabled for the repository and set to use the `gh-pages` branch.
+3. The workflow at `.github/workflows/deploy-frontend.yml` will publish `frontend/dist` automatically.
+
+### Recommended Deployment
+
+- Frontend: GitHub Pages or Vercel
+- Backend: Render, Railway, Fly.io, or another Python host
+
+For the best experience, run the frontend and backend together locally and point the frontend at `http://localhost:8000`.
