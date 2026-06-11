@@ -1,101 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import LiveMap from './components/LiveMap'
-import FlightPanel from './components/FlightPanel'
+import React, { useState } from 'react'
+import LiveMap from './components/maps/LiveMap'
+import FlightPanel from './components/aircraft/FlightPanel'
 import SearchBar from './components/SearchBar'
-import MetricsBar from './components/MetricsBar'
-import './index.css'
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
-const OPEN_SKY_URL = 'https://opensky-network.org/api/states/all?lamin=39.5&lamax=41.5&lomin=-75.0&lomax=-72.0'
+import MetricsBar from './components/charts/MetricsBar'
+import { useFlights } from './hooks/useFlights'
+import './styles/index.css'
 
 function App() {
-  const [flights, setFlights] = useState([])
   const [selectedFlight, setSelectedFlight] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [conflicts, setConflicts] = useState(0)
   const [searchTerm, setSearchTerm] = useState('')
-  const [summary, setSummary] = useState('Live flight briefing is loading...')
-  const [dataSource, setDataSource] = useState('AeroShield backend')
 
-  useEffect(() => {
-    const fetchFlights = async () => {
-      setLoading(true)
-      try {
-        const url = `${API_BASE_URL}/api/flights`
-        const response = await fetch(url)
-        const data = await response.json()
-
-        if (data.flights) {
-          setFlights(data.flights)
-          setConflicts(data.conflictCount || 0)
-          setSummary(data.summary || 'Live flight tracking is active. No summary available.')
-          setDataSource(API_BASE_URL ? 'AeroShield backend' : 'OpenSky public API')
-        } else if (data.states) {
-          const flightList = data.states
-            .map(state => ({
-              icao24: state[0],
-              callsign: state[1]?.trim() || 'UNKNOWN',
-              origin_country: state[2] || 'Unknown',
-              latitude: state[6],
-              longitude: state[5],
-              altitude: state[7],
-              velocity: state[9],
-              heading: state[10],
-              vertical_rate: state[11],
-              squawk: state[14],
-              timestamp: data.time
-            }))
-            .filter(f => f.latitude && f.longitude)
-
-          setFlights(flightList)
-          setConflicts(0)
-          setSummary('Live flight tracking enabled with direct OpenSky data.')
-          setDataSource('OpenSky public API')
-        }
-      } catch (error) {
-        console.error('Backend fetch failed, falling back to OpenSky:', error)
-
-        try {
-          const fallbackResponse = await fetch(OPEN_SKY_URL)
-          const fallbackData = await fallbackResponse.json()
-
-          if (fallbackData.states) {
-            const flightList = fallbackData.states
-              .map(state => ({
-                icao24: state[0],
-                callsign: state[1]?.trim() || 'UNKNOWN',
-                origin_country: state[2] || 'Unknown',
-                latitude: state[6],
-                longitude: state[5],
-                altitude: state[7],
-                velocity: state[9],
-                heading: state[10],
-                vertical_rate: state[11],
-                squawk: state[14],
-                timestamp: fallbackData.time
-              }))
-              .filter(f => f.latitude && f.longitude)
-
-            setFlights(flightList)
-            setConflicts(0)
-            setSummary('Live flight tracking enabled with direct OpenSky data.')
-            setDataSource('OpenSky public API')
-            return
-          }
-        } catch (fallbackError) {
-          console.error('OpenSky fallback also failed:', fallbackError)
-        }
-
-        setSummary('Unable to reach live data. Check the backend or network connection.')
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchFlights()
-    const interval = setInterval(fetchFlights, 10000)
-    return () => clearInterval(interval)
-  }, [])
+  const { flights, conflicts, loading, summary, dataSource } = useFlights()
 
   const filteredFlights = flights.filter(f =>
     f.callsign.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -7,13 +7,32 @@ from pathlib import Path
 # Add parent directory to path to allow imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+def load_env():
+    for name in ['.env', '.env.local']:
+        path = Path(__file__).parent.parent / name
+        if path.exists():
+            with open(path) as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith('#'):
+                        parts = line.split('=', 1)
+                        if len(parts) == 2:
+                            key, val = parts[0].strip(), parts[1].strip()
+                            if val.startswith('"') and val.endswith('"'):
+                                val = val[1:-1]
+                            elif val.startswith("'") and val.endswith("'"):
+                                val = val[1:-1]
+                            os.environ[key] = val
+
+load_env()
+
 from flask import Flask, jsonify
 from flask_cors import CORS
-from backend.opensky_fetcher import fetch_active_flights
-from backend.weather_engine import get_weather_zones, check_weather_effects
-from backend.collision_detector import calculate_separation, predict_collision_risk
-from backend.anomaly_detector import detect_anomaly
-from backend.flight_predictor import predict_future_position
+from backend.services.opensky.opensky_fetcher import fetch_active_flights
+from backend.services.weather.weather_engine import get_weather_zones, check_weather_effects
+from backend.ml.collision_detection.collision_detector import calculate_separation, predict_collision_risk
+from backend.ml.anomaly_detection.anomaly_detector import detect_anomaly
+from backend.ml.prediction.flight_predictor import predict_future_position
 
 try:
     import openai
