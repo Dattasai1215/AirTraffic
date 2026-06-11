@@ -101,6 +101,17 @@ def generate_ai_summary(total_flights, conflict_count, anomaly_count, active_ale
         logging.warning("OpenAI summary generation failed: %s", exc)
         return fallback
 
+@app.route("/",methods=["GET"])
+def home():
+    return jsonify({
+        "project":"AI Air Traffic Monitoring System",
+        "status":"Running",
+        "version":"1.0",
+        "endpoints":{
+            "health":"/api/status",
+            "flights":"/api/flights"
+        }
+    })
 
 @app.route("/api/flights", methods=["GET"])
 def api_flights():
