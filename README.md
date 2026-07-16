@@ -6,20 +6,47 @@ The platform visualizes active airspace in 3D and leverages advanced machine lea
 
 ## Project Workflow
 
-```
-Flight & Anomaly Data Generation
-             ↓
-  XGBoost & Isolation Forest Training
-             ↓
-Real-Time Flight Tracking (OpenSky / Mock Fallback)
-             ↓
-Flight Path Projection (XGBoost Regressor)
-             ↓
-Conflict Classification (XGBoost Classifier)
-             ↓
-Flight Telemetry Anomaly Detection (Isolation Forest)
-             ↓
-3D Airspace Weather-Aware Dashboard Visualization
+Historical Flight Data + Weather Data
+                 ↓
+Data Collection & Synthetic Anomaly Generation
+                 ↓
+Data Preprocessing
+• Missing Value Handling
+• Feature Engineering
+• Encoding & Scaling
+                 ↓
+Dataset Split (Training / Validation / Testing)
+                 ↓
+Model Development
+├── XGBoost Regressor (Trajectory Prediction)
+├── XGBoost Classifier (Conflict Detection)
+└── Isolation Forest (Anomaly Detection)
+                 ↓
+Model Evaluation
+├── RMSE
+├── MAE
+├── Accuracy
+├── Precision
+├── Recall
+└── F1-Score
+                 ↓
+Model Deployment
+                 ↓
+Live Flight Data (OpenSky API)
+                 ↓
+Feature Extraction
+                 ↓
+Trajectory Prediction
+                 ↓
+Conflict Detection
+                 ↓
+Anomaly Detection
+                 ↓
+Weather Fusion
+                 ↓
+3D Visualization Dashboard
+                 ↓
+Risk Alerts & Air Traffic Decision Support
 ```
 
 ### Step 1: Generate Flight Simulation Dataset
